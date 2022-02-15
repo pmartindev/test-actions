@@ -39,5 +39,5 @@ jobs:
             const issue = github.rest.issues.create({
               owner: 'pmartindev',
               repo: 'test-actions',
-              title: 'Test issue'
-            })
+              title: 'Test issue',
+            });
