@@ -39,6 +39,5 @@ jobs:
             const issue = github.rest.issues.create({
               owner: context.payload.repository.owner.login,
               repo: context.payload.repository.name,
-              title: 'Test issue',
-              body: body
+              title: 'Test issue'
             })
