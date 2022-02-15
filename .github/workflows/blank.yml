@@ -36,7 +36,7 @@ jobs:
           script: |
             const body = `This is a test`
             # create github issue on repository
-            const issue = github.rest.issues.create({
+            github.rest.issues.create({
               owner: 'pmartindev',
               repo: 'test-actions',
               title: 'Test issue',
