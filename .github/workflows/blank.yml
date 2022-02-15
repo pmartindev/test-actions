@@ -31,7 +31,7 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Submit issue
-        uses: actions/github-script
+        uses: actions/github-script@v6
         with:
           script: |
             const body = `This is a test`
