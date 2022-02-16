@@ -34,7 +34,6 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const body = `This is a test`
             # create github issue on repository
             github.rest.issues.create({
               owner: 'pmartindev',
