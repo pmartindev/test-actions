@@ -29,18 +29,19 @@ jobs:
       - name: Run a one-line script
         run: echo Hello, world!
 
+      - name: View context attributes
+        uses: actions/github-script@v5
+        with:
+          script: console.log(context)
+
       # Runs a set of commands using the runners shell
       - name: Submit issue
         uses: actions/github-script@v6
         with:
           script: |
-            /*
-              good block comment 
-            */
-            const owner = context.payload.repository.organization.login
-            const repo = context.payload.repository.name
+            # create github issue on repository
             github.rest.issues.create({
-              owner: owner,
-              repo: repo,
-              title: 'Test issue'
+              owner: 'pmartindev',
+              repo: 'test-actions',
+              title: 'Test issue',
             });
