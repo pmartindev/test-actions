@@ -34,7 +34,9 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            // good comment
+            /*
+              good block comment 
+            */
             github.rest.issues.create({
               owner: 'pmartindev',
               repo: 'test-actions',
