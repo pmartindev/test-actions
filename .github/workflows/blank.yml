@@ -39,9 +39,10 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            # create github issue on repository
+            const owner = context.payload.repository.organization.login
+            const repo = context.payload.repository.name
             github.rest.issues.create({
-              owner: 'pmartindev',
-              repo: 'test-actions',
+              owner: owner,
+              repo: repo,
               title: 'Test issue',
             });
