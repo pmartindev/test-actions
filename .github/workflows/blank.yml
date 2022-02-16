@@ -39,7 +39,6 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const owner = context.payload.repository.organization.login
             const repoArray = context.payload.repository.full_name.split('/')
             const owner = repoArray[0]
             const repo = repoArray[1]
