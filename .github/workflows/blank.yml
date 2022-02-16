@@ -40,7 +40,9 @@ jobs:
         with:
           script: |
             const owner = context.payload.repository.organization.login
-            const repo = context.payload.repository.name
+            const repoArray = context.payload.repository.full_name.split('/')
+            const owner = repoArray[0]
+            const repo = repoArray[1]
             github.rest.issues.create({
               owner: owner,
               repo: repo,
