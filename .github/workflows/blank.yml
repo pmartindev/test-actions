@@ -4,14 +4,21 @@ name: CI
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      openSourceRepo:
+        description: 'The open source workflow repository as {owner}/{repo} (ex: github/codeql-action)'
+        required: true
+      workflowTargetGhesUrl:
+        description: 'URL of target workflow repository in GHES(ex: https://ghes.dev/targetGroup/targetRepo)'
+        required: true
+      tagVersion:
+        description: 'Branch name/version (if not default branch)'
+        required: false
+      workflowRunNumber:
+        description: 'Workflow'
+        required: false
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -47,3 +54,29 @@ jobs:
               repo: repo,
               title: 'Test issue',
             });
+
+  checkout-and-push-repo:
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      CLONE_DIR: $(mktemp -d)
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        run: | 
+          # if version is not null, clone with version
+          if [[ -n "${{ github.event.inputs.tagVersion }}" ]]; then
+            TAG="--branch ${{ github.event.inputs.tagVersion }}"
+          fi
+          git clone --depth 1 $TAG https://github.com/${{ github.event.inputs.openSourceRepo }} "$CLONE_DIR"
+
+      - name: Push repo
+        run: |
+          IFS='/'
+          read -ra STRARR <<< "${{ github.event.inputs.openSourceRepo }}"
+          cd "$CLONE_DIR"
+          git remote add new-origin git@github.com:${{ github.repository_owner}}/"${STRARR[1]}"-${{ github.event.inputs.tagVersion }}".git
+          git remote rm origin
+          git remote rename new-origin origin
+          git push --all new-origin
+
