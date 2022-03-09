@@ -66,7 +66,6 @@ jobs:
       CLONE_DIR: $(mktemp -d)
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
         run: | 
           # if version is not null, clone with version
           if [[ -n "${{ github.event.inputs.tagVersion }}" ]]; then
