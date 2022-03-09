@@ -80,7 +80,7 @@ jobs:
           IFS='/'
           read -ra STRARR <<< "${{ github.event.inputs.openSourceRepo }}"
           cd "$CLONE_DIR"
-          git remote add new-origin git@github.com:${{ github.repository_owner}}/"${STRARR[1]}"-${{ github.event.inputs.tagVersion }}".git
+          git remote add new-origin git@github.com:${{ github.repository_owner}}/"${STRARR[1]}"-"${{ github.event.inputs.tagVersion }}".git
           git remote rm origin
           git remote rename new-origin origin
           git push --all origin
