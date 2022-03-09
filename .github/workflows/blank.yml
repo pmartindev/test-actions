@@ -10,15 +10,19 @@ on:
       openSourceRepo:
         description: 'The open source workflow repository as {owner}/{repo} (ex: github/codeql-action)'
         required: true
+        default: 'microsoft/setup-msbuild'
       workflowTargetGhesUrl:
         description: 'URL of target workflow repository in GHES(ex: https://ghes.dev/targetGroup/targetRepo)'
         required: true
+        default: 'https://ghes.dev/targetGroup/targetRepo'
       tagVersion:
         description: 'Branch name/version (if not default branch)'
         required: false
+        default: 'v1.1.1'
       workflowRunNumber:
         description: 'Workflow'
         required: false
+        default: '1'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
