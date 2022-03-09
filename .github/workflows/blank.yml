@@ -65,6 +65,8 @@ jobs:
     env:
       CLONE_DIR: $(mktemp -d)
     steps:
+      - name: Set Clone CLONE_DIR
+        run: echo "CLONE_DIR=$(mktemp -d)" >> $GITHUB_ENV
       - name: Checkout repo
         run: | 
           # if version is not null, clone with version
