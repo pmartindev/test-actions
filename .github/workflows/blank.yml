@@ -78,9 +78,7 @@ jobs:
           IFS='/' read -ra STRARR <<< "${{ github.event.inputs.openSourceRepo }}"
           SOURCE_REPO_URL="https://github.com/${{ github.event.inputs.openSourceRepo }}"
           NEW_REPO_NAME="${STRARR[1]}-${{ github.event.inputs.tagVersion }}"
-          NEW_REPO_URL='https://'${GITHUB_USERNAME}':'${GITHUB_TOKEN}'@github.com/"${STRARR[0]}"/"$NEW_REPO_NAME".git'
-          echo "GitHub token: ${{ secrets.GITHUB_TOKEN }}"
-          echo "GitHub username: $GITHUB_USERNAME"
+          NEW_REPO_URL='https://'${ secrets.DEMO_USER }':'${ secrets.DEMO_PAT }'@github.com/"${STRARR[0]}"/"$NEW_REPO_NAME".git'
           cd "$CLONE_DIR"
           git clone --bare "$SOURCE_REPO_URL" 
           gh repo create "$NEW_REPO_NAME"
