@@ -86,7 +86,7 @@ jobs:
           git clone --bare "$SOURCE_REPO_URL" "$NEW_REPO_NAME"
           echo "new_repo_url: $NEW_REPO_URL"
           git remote set-url origin "$NEW_REPO_URL"
-          # echo "Authenticating"
+          echo "Authenticating"
           echo "$USER_TOKEN" > .githubtoken
           gh auth login --with-token < .githubtoken
           echo "creating repo"
