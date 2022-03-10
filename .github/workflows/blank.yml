@@ -4,25 +4,28 @@ name: CI
 
 # Controls when the workflow will run
 on:
+  push:
+    branches:
+      - "main"
   # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-    inputs:
-      openSourceRepo:
-        description: 'The open source workflow repository as {owner}/{repo} (ex: github/codeql-action)'
-        required: true
-        default: 'microsoft/setup-msbuild'
-      workflowTargetGhesUrl:
-        description: 'URL of target workflow repository in GHES(ex: https://ghes.dev/targetGroup/targetRepo)'
-        required: true
-        default: 'https://ghes.dev/targetGroup/targetRepo'
-      tagVersion:
-        description: 'Branch name/version (if not default branch)'
-        required: false
-        default: 'v1.1'
-      workflowRunNumber:
-        description: 'Workflow'
-        required: false
-        default: '1'
+  # workflow_dispatch:
+  #   inputs:
+  #     openSourceRepo:
+  #       description: 'The open source workflow repository as {owner}/{repo} (ex: github/codeql-action)'
+  #       required: true
+  #       default: 'microsoft/setup-msbuild'
+  #     workflowTargetGhesUrl:
+  #       description: 'URL of target workflow repository in GHES(ex: https://ghes.dev/targetGroup/targetRepo)'
+  #       required: true
+  #       default: 'https://ghes.dev/targetGroup/targetRepo'
+  #     tagVersion:
+  #       description: 'Branch name/version (if not default branch)'
+  #       required: false
+  #       default: 'v1.1'
+  #     workflowRunNumber:
+  #       description: 'Workflow'
+  #       required: false
+  #       default: '1'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -36,28 +39,24 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
       - name: View context attributes
         uses: actions/github-script@v5
         with:
           script: console.log(context)
 
-      # Runs a set of commands using the runners shell
-      - name: Submit issue
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const repoArray = context.payload.repository.full_name.split('/')
-            const owner = repoArray[0]
-            const repo = repoArray[1]
-            github.rest.issues.create({
-              owner: owner,
-              repo: repo,
-              title: 'Test issue',
-            });
+      # # Runs a set of commands using the runners shell
+      # - name: Submit issue
+      #   uses: actions/github-script@v6
+      #   with:
+      #     script: |
+      #       const repoArray = context.payload.repository.full_name.split('/')
+      #       const owner = repoArray[0]
+      #       const repo = repoArray[1]
+      #       github.rest.issues.create({
+      #         owner: owner,
+      #         repo: repo,
+      #         title: 'Test issue',
+      #       });
 
   checkout-and-push-repo:
     runs-on: ubuntu-latest
@@ -73,14 +72,23 @@ jobs:
           if [[ -n "${{ github.event.inputs.tagVersion }}" ]]; then
             TAG="--branch ${{ github.event.inputs.tagVersion }}"
           fi
-          git clone --depth 1 $TAG https://github.com/${{ github.event.inputs.openSourceRepo }} "$CLONE_DIR"
+          git clone $TAG https://github.com/${{ github.event.inputs.openSourceRepo }} "$CLONE_DIR"
 
       - name: Push repo
         run: |
           IFS='/' read -ra STRARR <<< "${{ github.event.inputs.openSourceRepo }}"
+          SOURCE_REPO_URL="https://github.com/${{ github.event.inputs.openSourceRepo }}"
+          NEW_REPO_NAME="${STRARR[1]}-${{ github.event.inputs.tagVersion }}"
+          NEW_REPO_URL='https://'${GITHUB_USERNAME}':'${GITHUB_TOKEN}'@github.com/"${STRARR[0]}"/"$NEW_REPO_NAME".git'
           cd "$CLONE_DIR"
-          git remote add new-origin ${{ secrets.DEMO_PAT}}@github.com:${{ github.repository_owner}}/"${STRARR[1]}"-"${{ github.event.inputs.tagVersion }}".git
-          git remote rm origin
-          git remote rename new-origin origin
-          git push --all origin
+          git clone --bare "$SOURCE_REPO_URL" 
+          gh repo create "$NEW_REPO_NAME"
+          git remote set-url origin "${new_repo_url}"
+          git push --mirror origin
+          rm -rf $CLONE_DIR
+          # gh repo create test-amex-pipeline-23 --source=. --push --private
+          # git remote add new-origin ${{ secrets.DEMO_USERNAME}}:${{ secrets.DEMO_PAT}}@github.com:${{ github.repository_owner}}/"${STRARR[1]}"-"${{ github.event.inputs.tagVersion }}".git
+          # git remote rm origin
+          # git remote rename new-origin origin
+          # git push --all origin
 
