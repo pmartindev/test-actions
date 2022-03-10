@@ -90,7 +90,7 @@ jobs:
           echo "$USER_PAT" > .githubtoken
           gh auth login --with-token < .githubtoken
           echo "creating repo"
-          gh repo create $NEW_REPO_NAME
+          gh repo create --private $NEW_REPO_NAME
           git push --mirror origin
           rm -rf $CLONE_DIR
           # gh repo create test-amex-pipeline-23 --source=. --push --private
