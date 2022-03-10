@@ -84,7 +84,7 @@ jobs:
           NEW_REPO_URL="https://$USER_TOKEN:$USER_PAT@github.com/${STRARR[0]}/$NEW_REPO_NAME.git"
           cd "$CLONE_DIR"
           git clone --bare "$SOURCE_REPO_URL" 
-          gh repo create "$NEW_REPO_NAME"
+          # gh repo create "$NEW_REPO_NAME"
           git remote set-url origin "${new_repo_url}"
           git push --mirror origin
           rm -rf $CLONE_DIR
