@@ -74,11 +74,14 @@ jobs:
           git clone $TAG https://github.com/${{ github.event.inputs.openSourceRepo }} "$CLONE_DIR"
 
       - name: Push repo
+        env:
+          USER_TOKEN: ${{ secrets.DEMO_USER }}
+          USER_PAT: ${{ secrets.DEMO_PAT }}
         run: |
           IFS='/' read -ra STRARR <<< "${{ github.event.inputs.openSourceRepo }}"
           SOURCE_REPO_URL="https://github.com/${{ github.event.inputs.openSourceRepo }}"
           NEW_REPO_NAME="${STRARR[1]}-${{ github.event.inputs.tagVersion }}"
-          NEW_REPO_URL='https://'${ secrets.DEMO_USER }':'${ secrets.DEMO_PAT }'@github.com/"${STRARR[0]}"/"$NEW_REPO_NAME".git'
+          NEW_REPO_URL="https://$USER_TOKEN:$USER_PAT@github.com/${STRARR[0]}/$NEW_REPO_NAME.git"
           cd "$CLONE_DIR"
           git clone --bare "$SOURCE_REPO_URL" 
           gh repo create "$NEW_REPO_NAME"
@@ -86,7 +89,7 @@ jobs:
           git push --mirror origin
           rm -rf $CLONE_DIR
           # gh repo create test-amex-pipeline-23 --source=. --push --private
-          # git remote add new-origin ${{ secrets.DEMO_USERNAME}}:${{ secrets.DEMO_PAT}}@github.com:${{ github.repository_owner}}/"${STRARR[1]}"-"${{ github.event.inputs.tagVersion }}".git
+          # git remote add new-origin ${{ secrets.DEMO_USER}}:${{ secrets.DEMO_PAT}}@github.com:${{ github.repository_owner}}/"${STRARR[1]}"-"${{ github.event.inputs.tagVersion }}".git
           # git remote rm origin
           # git remote rename new-origin origin
           # git push --all origin
