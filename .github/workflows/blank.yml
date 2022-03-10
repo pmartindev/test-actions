@@ -83,8 +83,9 @@ jobs:
           NEW_REPO_NAME="${STRARR[1]}-${{ github.event.inputs.tagVersion }}"
           NEW_REPO_URL="https://$USER_TOKEN:$USER_PAT@github.com/${STRARR[0]}/$NEW_REPO_NAME.git"
           cd "$CLONE_DIR"
-          git clone --bare "$SOURCE_REPO_URL" NEW_REPO_NAME
-          git remote set-url origin "${new_repo_url}"
+          git clone --bare "$SOURCE_REPO_URL" $NEW_REPO_NAME
+          echo "new_repo_url: $NEW_REPO_URL"
+          git remote set-url origin "$NEW_REPO_URL"
           git push --mirror origin
           rm -rf $CLONE_DIR
           # gh repo create test-amex-pipeline-23 --source=. --push --private
