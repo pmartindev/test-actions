@@ -80,7 +80,7 @@ jobs:
           NEW_REPO_NAME="${STRARR[1]}-${{ github.event.inputs.tagVersion }}"
           NEW_REPO_URL='https://'${GITHUB_USERNAME}':'${GITHUB_TOKEN}'@github.com/"${STRARR[0]}"/"$NEW_REPO_NAME".git'
           echo "GitHub username: $GITHUB_USERNAME"
-          echo "GitHub password: $GITHUB_PASSWORD"
+          echo "GitHub token: $GITHUB_TOKEN"
           cd "$CLONE_DIR"
           git clone --bare "$SOURCE_REPO_URL" 
           gh repo create "$NEW_REPO_NAME"
