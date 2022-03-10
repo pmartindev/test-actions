@@ -25,7 +25,7 @@ on:
         description: 'Workflow'
         required: false
         default: '1'
-
+permissions: write-all
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -79,8 +79,8 @@ jobs:
           SOURCE_REPO_URL="https://github.com/${{ github.event.inputs.openSourceRepo }}"
           NEW_REPO_NAME="${STRARR[1]}-${{ github.event.inputs.tagVersion }}"
           NEW_REPO_URL='https://'${GITHUB_USERNAME}':'${GITHUB_TOKEN}'@github.com/"${STRARR[0]}"/"$NEW_REPO_NAME".git'
-          echo "GitHub username: ${{ secrets.GITHUB_USERNAME}}"
           echo "GitHub token: ${{ secrets.GITHUB_TOKEN }}"
+          echo "GitHub username: ${{ secrets.GITHUB_USERNAME}}"
           cd "$CLONE_DIR"
           git clone --bare "$SOURCE_REPO_URL" 
           gh repo create "$NEW_REPO_NAME"
