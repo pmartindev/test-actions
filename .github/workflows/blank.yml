@@ -87,7 +87,7 @@ jobs:
           echo "new_repo_url: $NEW_REPO_URL"
           git remote set-url origin "$NEW_REPO_URL"
           echo "Authenticating"
-          echo "$USER_TOKEN" > .githubtoken
+          echo "$USER_PAT" > .githubtoken
           gh auth login --with-token < .githubtoken
           echo "creating repo"
           gh repo create $NEW_REPO_NAME
