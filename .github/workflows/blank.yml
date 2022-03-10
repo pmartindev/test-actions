@@ -84,7 +84,7 @@ jobs:
         run: |
           IFS='/' read -ra STRARR <<< "${{ github.event.inputs.openSourceRepo }}"
           SOURCE_REPO_URL="https://github.com/${{ github.event.inputs.openSourceRepo }}"
-          NEW_REPO_NAME="${STRARR[1]}-${{ github.event.inputs.tagVersion }}"
+          NEW_REPO_NAME="${STRARR[1]}-${{ github.event.inputs.tagVersion }}-${{ github.event.inputs.workflowRunNumber }}"
           NEW_REPO_URL="https://$USER_TOKEN:$USER_PAT@github.com/${{ github.event.inputs.uploadOrg }}/$NEW_REPO_NAME"
           cd "$CLONE_DIR"
           git clone --bare "$SOURCE_REPO_URL" "$NEW_REPO_NAME"
@@ -95,5 +95,6 @@ jobs:
           gh auth login --with-token < .githubtoken
           echo "creating repo"
           gh repo create --private $NEW_REPO_NAME
+           #pushing to repository
           git push --mirror origin
           rm -rf $CLONE_DIR
