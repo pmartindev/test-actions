@@ -115,11 +115,9 @@ jobs:
             const repoArray = context.payload.repository.full_name.split('/')
             const owner = repoArray[0]
             const repo = repoArray[1]
-            const body = `[View workflow run for details](${context.payload.repository.html_url}/actions/runs/${context.runId})`` + '\n' + `CSVArtifactURL:[https://github.com/githubcustomers/AMEX-Actions-Scanning/suites/5351388886/artifacts/167463752]` + '\n' + `SarifArtifactURL:[https://github.com/githubcustomers/AMEX-Actions-Scanning/suites/5512449082/artifacts/176642436]` + '\n' + 'Critical:[]' + '\n' + 'High:[]' + '\n' + 'Medium:[]' + '\n' + 'Low:[]'
             github.rest.issues.create({
               owner: owner,
               repo: repo,
-              body = body,
               title: '${{ needs.build.outputs.source_repo_var}}-${{ github.event.inputs.tagVersion }}-${{ github.event.inputs.workflowRunNumber }}',
               labels: ['using:${{ needs.checkout-and-push-repo.outputs.using_var }}', 'results:Pass']
             });
