@@ -120,4 +120,4 @@ jobs:
               repo: repo,
               title: '${{ needs.build.outputs.source_repo_var}}-${{ github.event.inputs.tagVersion }}-${{ github.event.inputs.workflowRunNumber }}',
               labels: ['using:${{ needs.checkout-and-push-repo.outputs.using_var }}']
-            });\
+            });
