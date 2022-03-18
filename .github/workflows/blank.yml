@@ -108,7 +108,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./sarif-file-results-parser-action
+      - uses: ./.github/sarif-file-results-parser-action
         with:
           # Will fail if any results are found
           failOnAny: true
