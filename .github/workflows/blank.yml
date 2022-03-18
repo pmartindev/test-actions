@@ -103,6 +103,17 @@ jobs:
           rm -rf $CLONE_DIR
     outputs:
       using_var: ${{ steps.scan-action-yml.outputs.using }}
+ 
+  parse-file: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./sarif-file-results-parser-action
+        with:
+          # Will fail if any results are found
+          failOnAny: true
+          # SARIF files will have a *.sarif extension, this is just a test file
+          sarifFile: ./__tests__/sarif-files/sarif-without-results.json
 
   submit-issue:
     runs-on: ubuntu-latest
